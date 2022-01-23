@@ -34,7 +34,21 @@ function App() {
       <ApolloProvider client={client}>
         <div className="container">
           <h1 className="text-center my-4">GraphQL &mdash; CRUD</h1>
-          <div className="row">
+          <h6 className="text-center"> Technology used: 
+            <span className="badge bg-primary m-1">React Js</span>
+            <span className="badge bg-danger m-1">Sequelize ORM</span>
+            <span className="badge bg-primary m-1">Typescript</span>
+            <span className="badge bg-danger m-1">Redux</span>
+            <span className="badge bg-danger m-1">GraphQL</span>
+            <span className="badge bg-primary m-1">Node Js</span>
+            <span className="badge bg-primary m-1">Redux Toolkit</span>
+            <span className="badge bg-primary m-1">Exoress Js</span>
+            <span className="badge bg-primary m-1">Nodemon</span>
+            <span className="badge bg-danger m-1">Apollo Client</span>
+            <span className="badge bg-primary m-1"></span>
+            <span className="badge bg-primary m-1"></span>
+          </h6>
+          <div className="row mt-4">
             <UserAllList /> {/* display all users */}
             <UserCreate /> {/* user creation comnent */}
           </div>

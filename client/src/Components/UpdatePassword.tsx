@@ -30,7 +30,7 @@ const UpdatePassword = () => {
 
     // password mutation
     const [updatePassword, { error, data, loading }] = useMutation(UPDATE_PASSWORD);
-    console.log(data, error, loading)
+    // console.log(data, error, loading)
 
     // new password info
     // console.log(password);
