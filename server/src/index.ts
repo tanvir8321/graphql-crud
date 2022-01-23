@@ -1,21 +1,42 @@
 import express from 'express';
+const db = require("./Models/index.ts");
 import { graphqlHTTP } from 'express-graphql';
 import { schema } from './Schema';
 import cors from 'cors';
-import { createConnection } from 'typeorm';
+// import { createConnection } from 'typeorm';
+const { Sequelize, DataTypes } = require('sequelize');
+
 import { Users } from './Entities/Users';
 
 
 const main = async () => {
-    await createConnection({
-        type: "mysql",
-        database: "graphqlcrud",
-        username: "root",
-        password: "12345678",
-        logging: true, 
-        synchronize: false,
-        entities: [Users],
-      });
+
+    // const sequelize = new Sequelize('aunkurstg', 'aunkusr', '$AunKuR!!$$123', {
+    //     host: 'localhost',
+    //     dialect: 'mssql'
+    // });
+
+
+    // try {
+    //     await sequelize.authenticate();
+    //     console.log('Connection has been established successfully.');
+    // } catch (error) {
+    //     console.error('Unable to connect to the database:', error);
+    // }
+    
+    db.sequelize.sync();
+
+
+
+    // await createConnection({
+    //     type: "mysql",
+    //     database: "graphqlcrud",
+    //     username: "root",
+    //     password: "12345678",
+    //     logging: true, 
+    //     synchronize: false,
+    //     entities: [Users],
+    //   });
     const app = express();
     app.use(cors());
     app.use(express.json());
@@ -23,8 +44,8 @@ const main = async () => {
         schema,
         graphiql: true
     }))
-    app.listen(3001, () => {
-        console.log("server running at 3001");
+    app.listen(3000, () => {
+        console.log("server running at 3000");
     })
 }
 main().catch((err) => {

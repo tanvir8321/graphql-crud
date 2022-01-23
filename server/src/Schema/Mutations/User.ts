@@ -1,5 +1,6 @@
 import { GraphQLID, GraphQLString } from "graphql";
-import { Users } from "../../Entities/Users";
+// import { Users } from "../../Entities/Users";
+const db = require('../../Models');
 import { MessageType } from "../TypeDefs/Message";
 import { UserType } from "../TypeDefs/User";
 
@@ -14,7 +15,7 @@ export const CREATE_USER = {
     },
     async resolve(parent:any, args:any){
         const { name, username, password } = args;
-        await Users.insert(args)
+        await db.Users.create(args)
         return args 
     },
 }
@@ -27,7 +28,7 @@ export const DELETE_USER = {
     },
     async resolve(parent:any, args:any) {
         const id = args.id;
-        await Users.delete(id);
+        await db.Users.destroy({where: {id}});
         return id;
     }
 }
@@ -42,13 +43,24 @@ export const UPDATE_PASSWORD = {
     },
     async resolve(parent:any, args:any) {
         const { username, oldPassword, newPassword } = args;
-        const user = await Users.findOne({ username: username }); // it return one user using 'findOne' by username
+        // const user = await db.Users.findOne({ username: username }); // it return one user using 'findOne' by username
+        const user = await db.Users.findOne({where: { username: username }}); // it return one user using 'findOne' by username
         if(!user){
             throw new Error("User does not exist!");
         }
         const userPassword = user?.password;
         if(oldPassword === userPassword){
-            await Users.update({ username: username}, { password: newPassword });
+            // await db.Users.update({ username: username}, { password: newPassword });
+            await db.Users.update(
+                { 
+                    password: newPassword
+                }, 
+                {
+                    where: { 
+                        username
+                    }
+                });
+            // return { success: true, message: "Password updated."};
             return { success: true, message: "Password updated."};
 
         }else{

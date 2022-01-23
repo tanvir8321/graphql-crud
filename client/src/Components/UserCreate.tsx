@@ -1,6 +1,7 @@
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import React, { useState } from 'react';
 import { CREATE_USER } from '../Graphql/Mutations';
+import { GET_ALL_USERS } from '../Graphql/Queries';
 import UpdatePassword from './UpdatePassword';
 
 const UserCreate = () => {
@@ -11,6 +12,9 @@ const UserCreate = () => {
         password: "",
     }
 
+    // for update user information UI when click the create button
+    const { refetch } = useQuery(GET_ALL_USERS);
+    
     // user state
     const [newUser, setNewUser] = useState(initNewUser);
 
@@ -44,7 +48,7 @@ const UserCreate = () => {
                 <input value={newUser?.username} name="username" onChange={userChangeHandler} type="text" placeholder="Username..." className="form-control mb-3" />
                 <input value={newUser?.password} name="password" onChange={userChangeHandler} type="text" placeholder="Password..." className="form-control mb-3" />
                 <div className="text-end">
-                    <button onClick={userCreateHandler} className="btn btn-primary">Create User</button>
+                    <button onClick={()=>{ userCreateHandler(); refetch();}} className="btn btn-primary">Create User</button>
                 </div>
             </div>
             <UpdatePassword />

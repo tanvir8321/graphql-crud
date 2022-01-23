@@ -35,6 +35,7 @@ export const UPDATE_PASSWORD = gql`
       newPassword: $newPassword
     ) {
       message
+      success
     }
   }
 `;

@@ -1,6 +1,7 @@
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import React, { useState } from 'react';
 import { UPDATE_PASSWORD } from '../Graphql/Mutations';
+import { GET_ALL_USERS } from '../Graphql/Queries';
 import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
 
@@ -12,11 +13,15 @@ const UpdatePassword = () => {
         newPassword: ""
     }
 
+    // make a query for get all users
+    const { refetch } = useQuery(GET_ALL_USERS);
+    // console.log(refetch)
+
     // password state
     const [password, setPassword] = useState(initPassword);
 
     // password state update
-    const passwordChangeHandler = (event: { target: { name: any; value: any; }; }) => {
+    const passwordChangeHandler = (event: any) => {
         setPassword({
             ...password,
             [event.target.name]: event.target.value
@@ -24,13 +29,31 @@ const UpdatePassword = () => {
     }
 
     // password mutation
-    const [updatePassword, { error }] = useMutation(UPDATE_PASSWORD);
+    const [updatePassword, { error, data, loading }] = useMutation(UPDATE_PASSWORD);
+    console.log(data, error, loading)
 
     // new password info
     // console.log(password);
-    
+
+    // update by onclick function
+    const updatePasswordHandler = () => {
+        updatePassword({
+            variables: {
+                username: password.userName,
+                oldPassword: password.oldPassword,
+                newPassword: password.newPassword,
+            },
+        });
+        setPassword(initPassword);
+    }
+
+
     return (
         <div className="border rounded p-2 mt-4">
+            {
+                data?.updatePassword?.success && toast("Password Updated...")
+                
+            }
             <h4 className="text-center">User Password Update</h4>
             <input
                 className="form-control mb-3"
@@ -66,22 +89,11 @@ const UpdatePassword = () => {
             // }}
             />
 
+            {/* toastify component */}
+            <ToastContainer />
+
             <div className="text-end">
-                <button
-                    className="btn btn-warning"
-                onClick={() => {
-                    setPassword(initPassword);
-                    updatePassword({
-                        variables: {
-                            username: password.userName,
-                            oldPassword: password.oldPassword,
-                            newPassword: password.newPassword,
-                        },
-                    });
-                }}
-                >
-                    UPDATE PASSWORD
-                </button>
+                <button className="btn btn-warning" onClick={() => { updatePasswordHandler(); refetch(); }} >Update Password</button>
             </div>
         </div>
     );
